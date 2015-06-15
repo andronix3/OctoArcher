@@ -47,7 +47,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
 import com.smartg.swing.layout.JNodeLayout;
 import com.smartg.swing.layout.LayoutNode;
@@ -140,7 +139,7 @@ public class ResFrontend extends JPanel {
 	    }
 	});
 
-	setBorder(new EmptyBorder(10, 10, 10, 10));
+//	setBorder(new EmptyBorder(10, 10, 10, 10));
 
 	LayoutNode.GridNode root = new LayoutNode.GridNode("root");
 	root.setHorizontalAlignment(NodeAlignment.CENTER);
@@ -220,9 +219,7 @@ public class ResFrontend extends JPanel {
 	}
 
 	public void setMargin(Insets m) {
-	    m.left = 0;
-	    m.right = 0;
-	    super.setMargin(m);
+	    super.setMargin(new Insets(m.top, 0, m.bottom, 0));
 	}
     }
 
