@@ -1,2 +1,2 @@
 # OctoArcher
-Save resources as java classes.
+Save things as java classes and forget trouble with Class#getResource().
