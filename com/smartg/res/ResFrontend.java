@@ -46,6 +46,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
 import com.smartg.swing.layout.JNodeLayout;
@@ -139,7 +140,7 @@ public class ResFrontend extends JPanel {
 	    }
 	});
 
-//	setBorder(new EmptyBorder(10, 10, 10, 10));
+	// setBorder(new EmptyBorder(10, 10, 10, 10));
 
 	LayoutNode.GridNode root = new LayoutNode.GridNode("root");
 	root.setHorizontalAlignment(NodeAlignment.CENTER);
@@ -216,6 +217,52 @@ public class ResFrontend extends JPanel {
 
 	public SlimButton(String text, Icon icon) {
 	    super(text, icon);
+	}
+
+	public void setMargin(Insets m) {
+	    super.setMargin(new Insets(m.top, 0, m.bottom, 0));
+	}
+    }
+
+    /**
+     * JToggleButton without left and right margins.
+     * 
+     * @author andrey
+     *
+     */
+    public static class SlimToggleButton extends JToggleButton {
+
+	private static final long serialVersionUID = -9003432410940699371L;
+
+	public SlimToggleButton() {
+	}
+
+	public SlimToggleButton(Action a) {
+	    super(a);
+	}
+
+	public SlimToggleButton(Icon icon, boolean selected) {
+	    super(icon, selected);
+	}
+
+	public SlimToggleButton(Icon icon) {
+	    super(icon);
+	}
+
+	public SlimToggleButton(String text, boolean selected) {
+	    super(text, selected);
+	}
+
+	public SlimToggleButton(String text, Icon icon, boolean selected) {
+	    super(text, icon, selected);
+	}
+
+	public SlimToggleButton(String text, Icon icon) {
+	    super(text, icon);
+	}
+
+	public SlimToggleButton(String text) {
+	    super(text);
 	}
 
 	public void setMargin(Insets m) {
