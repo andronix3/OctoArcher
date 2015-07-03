@@ -125,6 +125,13 @@ public class ResFrontend extends JPanel {
 		checkButton();
 	    }
 	});
+	
+	defaultTypeText.addActionListener(new ActionListener() {
+	    
+	    public void actionPerformed(ActionEvent e) {
+		checkButton();
+	    }
+	});
 
 	go.addActionListener(new ActionListener() {
 

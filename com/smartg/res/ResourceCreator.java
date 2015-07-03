@@ -225,8 +225,9 @@ public class ResourceCreator {
 	    // "com.imagero.icons", new String[]{"com.imagero.res.Resource",
 	    // "com.imagero.res.AbstractResource"}, new String[]{"Resource"},
 	    // "AbstractResource");
+	    
 	    String destPackage = "com.imagero.poker.icons";
-	    String[] imports = new String[] { "com.imagero.res.Resource", "com.imagero.res.AbstractResource" };
+	    String[] imports = new String[] { "com.smartg.res.Resource", "com.smartg.res.AbstractResource" };
 	    String[] interfaces = new String[] { "Resource" };
 	    String _extends = "AbstractResource";
 	    ResourceCreator rc = new ResourceCreator(outputRootDir, destPackage, imports, interfaces, _extends);
