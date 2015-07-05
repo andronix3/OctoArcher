@@ -36,11 +36,14 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -57,6 +60,8 @@ import com.smartg.swing.layout.NodeUtils.GridHelper;
 public class ResFrontend extends JPanel {
 
     private static final long serialVersionUID = 899925615247278681L;
+
+    private Preferences prefs = Preferences.userNodeForPackage(getClass());
 
     private String[] imports = new String[] { "com.smartg.res.Resource", "com.smartg.res.AbstractResource" };
     private String[] interfaces = new String[] { "Resource" };
@@ -88,7 +93,36 @@ public class ResFrontend extends JPanel {
 
     private JButton go = new JButton("Go");
 
+    private JComboBox<String> recentFilesCombo = new JComboBox<String>();
+
     public ResFrontend() {
+
+	String[] keys = {};
+	try {
+	    keys = prefs.keys();
+	} catch (BackingStoreException ex) {
+	    ex.printStackTrace();
+	}
+	for (String item : keys) {
+	    recentFilesCombo.addItem(item);
+	}
+
+	recentFilesCombo.addActionListener(new ActionListener() {
+
+	    public void actionPerformed(ActionEvent e) {
+		String destPackage = (String) recentFilesCombo.getSelectedItem();
+		String s = prefs.get(destPackage, "");
+		
+		String[] split = s.split("---");
+
+		destPackageText.setText(destPackage);
+		outputDirectoryText.setText(split[0]);
+		sourceDirectoryText.setText(split[1]);
+		defaultTypeText.setText(split[2]);
+		
+		checkButton();
+	    }
+	});
 
 	destPackageText.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent e) {
@@ -125,9 +159,9 @@ public class ResFrontend extends JPanel {
 		checkButton();
 	    }
 	});
-	
+
 	defaultTypeText.addActionListener(new ActionListener() {
-	    
+
 	    public void actionPerformed(ActionEvent e) {
 		checkButton();
 	    }
@@ -136,11 +170,19 @@ public class ResFrontend extends JPanel {
 	go.addActionListener(new ActionListener() {
 
 	    public void actionPerformed(ActionEvent e) {
-		ResourceCreator rc = new ResourceCreator(outputDirectoryText.getText(), destPackageText.getText(), imports, interfaces, _extends);
-		rc.defaultType = defaultTypeText.getText();
+
+		String destPackage = destPackageText.getText();
+		String outputDirectory = outputDirectoryText.getText();
+		String sourceDirectory = sourceDirectoryText.getText();
+		String defaultType = defaultTypeText.getText();
+
+		prefs.put(destPackage, outputDirectory + "---" + sourceDirectory + "---" + defaultType);
+
+		ResourceCreator rc = new ResourceCreator(outputDirectory, destPackage, imports, interfaces, _extends);
+		rc.defaultType = defaultType;
 		rc.prefix = "";
 		try {
-		    rc.processFile(new File(sourceDirectoryText.getText()), recursive.isSelected());
+		    rc.processFile(new File(sourceDirectory), recursive.isSelected());
 		} catch (IOException ex) {
 		    ex.printStackTrace();
 		}
@@ -160,6 +202,9 @@ public class ResFrontend extends JPanel {
 	setLayout(layout);
 
 	GridHelper gridHelper = new GridHelper(this, "root", 9);
+
+	gridHelper.add(new JLabel("Recent Jobs", SwingConstants.RIGHT), 2);
+	gridHelper.add(recentFilesCombo, 7);
 
 	gridHelper.add(destPackageLabel, 2);
 	gridHelper.add(destPackageText, 5);
