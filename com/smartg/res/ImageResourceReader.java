@@ -38,6 +38,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.swing.ImageIcon;
+
 import com.imagero.java.awt.ImageTracker;
 
 /**
@@ -88,7 +90,7 @@ public class ImageResourceReader implements ResourceReader<Image> {
         }
         if (b != null) {
             Image image = Toolkit.getDefaultToolkit().createImage(b);
-            loadImage(image);
+            new ImageIcon(image);
             return image;
         }
         return null;
