@@ -36,6 +36,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -88,6 +91,10 @@ public class ResFrontend extends JPanel {
 
     private JLabel defaultTypeLabel = new JLabel("Default Type", SwingConstants.RIGHT);
     private JTextField defaultTypeText = createTextField(5);
+    
+    private JLabel extensionsLabel = new JLabel("Extensions:"); 
+	private JTextField extensionsText = createTextField(10);
+
 
     private JCheckBox recursive = new JCheckBox("Recursive");
 
@@ -119,6 +126,7 @@ public class ResFrontend extends JPanel {
 		outputDirectoryText.setText(split[0]);
 		sourceDirectoryText.setText(split[1]);
 		defaultTypeText.setText(split[2]);
+		extensionsText.setText(split[3]);
 		
 		checkButton();
 	    }
@@ -175,12 +183,24 @@ public class ResFrontend extends JPanel {
 		String outputDirectory = outputDirectoryText.getText();
 		String sourceDirectory = sourceDirectoryText.getText();
 		String defaultType = defaultTypeText.getText();
+		String extensions = extensionsText.getText();
 
-		prefs.put(destPackage, outputDirectory + "---" + sourceDirectory + "---" + defaultType);
+		prefs.put(destPackage, outputDirectory + "---" + sourceDirectory + "---" + defaultType + "---" + extensions);
 
 		ResourceCreator rc = new ResourceCreator(outputDirectory, destPackage, imports, interfaces, _extends);
 		rc.defaultType = defaultType;
 		rc.prefix = "";
+		String[] split = extensions.split("[,]|[, ]");
+		List<String> list = new ArrayList<>(Arrays.asList(split));
+		Iterator<String> iterator = list.iterator();
+		while(iterator.hasNext()) {
+			String next = iterator.next();
+			if(next.isEmpty()) {
+				iterator.remove();
+			}
+		}
+		System.out.println(list);
+		rc.setExtensions(list.toArray(new String[0]));
 		try {
 		    rc.processFile(new File(sourceDirectory), recursive.isSelected());
 		} catch (IOException ex) {
@@ -217,9 +237,14 @@ public class ResFrontend extends JPanel {
 	gridHelper.add(sourceDirectoryLabel, 2);
 	gridHelper.add(sourceDirectoryText, 6);
 	gridHelper.add(sourceDirectoryButton, 1);
-
+	
 	gridHelper.add(defaultTypeLabel, 2);
 	gridHelper.add(defaultTypeText, 5);
+
+	gridHelper.skipToNextLine();
+
+	gridHelper.add(extensionsLabel, 2);
+	gridHelper.add(extensionsText, 5);
 
 	gridHelper.add(go, 2);
 
